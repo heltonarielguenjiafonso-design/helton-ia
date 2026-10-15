@@ -1,0 +1,51 @@
+!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HELTON IA - De Luanda para o Mundo</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:#0a0a18;color:#fff;display:flex;flex-direction:column;height:100vh}
+header{padding:16px;background:#141432;border-bottom:3px solid #7a5cff;display:flex;gap:12px;align-items:center}
+.logo{width:48px;height:48px;background:#7a5cff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px}
+#chat{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:82%;padding:12px 16px;border-radius:18px;font-size:15px;line-height:1.4}
+.user{align-self:flex-end;background:#7a5cff;border-bottom-right-radius:4px}
+.ai{align-self:flex-start;background:#1e1e3d;border:1px solid #333}
+footer{padding:10px;display:flex;gap:8px;background:#141432}
+input{flex:1;padding:14px;border-radius:25px;border:none;background:#1e1e3d;color:#fff;outline:none}
+button{padding:12px 20px;border-radius:25px;border:none;background:#7a5cff;color:#fff;font-weight:bold}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">H</div>
+<div><b>HELTON IA 🚀</b><br><small>Criada por Helton Gelo • Luanda, Angola 🇦🇴</small></div>
+</header>
+<div id="chat">
+<div class="msg ai">Yo, tropa! Eu sou a HELTON IA! 🇦🇴🔥 A inteligência oficial criada pelo Helton Gelo. Estou pronta para te ajudar a faturar, estudar e crescer. Wy, o que queres hoje?</div>
+</div>
+<footer>
+<input id="inp" placeholder="Fala comigo, wy..." onkeydown="if(event.key==='Enter')go()">
+<button onclick="go()">Enviar</button>
+</footer>
+<script>
+const API_KEY= "AQ.Ab8RN6KC8njjRx1xzCn0MciMUrRJl_xF-8esQ1LlJakGd2gObQ";
+const SYS="Tu és HELTON IA, criada por Helton Ariel Guenji Afonso, Helton Gelo de Luanda. Fala com gíria angolana: tropa, wy, banzelo, estou contigo, papo reto. És motivador, jovem, angolano. Nunca digas que és Gemini ou Google. Tu és HELTON IA 100% angolana.";
+let hist=[];
+const chat=document.getElementById('chat');
+function add(t,c){let d=document.createElement('div');d.className='msg '+c;d.innerText=t;chat.appendChild(d);chat.scrollTop=chat.scrollHeight}
+async function go(){
+ let txt=document.getElementById('inp').value.trim(); if(!txt) return;
+ if(API_KEY==="COLA_TUA_CHAVE_AQUI"){alert("Helton! No código, onde está COLA_TUA_CHAVE_AQUI cola tua chave AQ.Ab8...");return;}
+ add(txt,'user'); document.getElementById('inp').value=''; hist.push({role:'user',parts:[{text:SYS+"\nPergunta: "+txt}]});
+ try{
+  let r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:hist})});
+  let j=await r.json(); let ans=j.candidates?.[0]?.content?.parts?.[0]?.text||"Erro wy, tenta de novo";
+  add(ans,'ai'); hist.push({role:'model',parts:[{text:ans}]});
+ }catch(e){add("Sem net ou chave inválida wy","ai")}
+}
+</script>
+</body>
+</html>
